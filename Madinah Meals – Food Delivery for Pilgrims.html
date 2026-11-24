@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Madinah Meals – Food Delivery for Pilgrims</title>
+<style>
+:root{--bg:#faf1e0;--card:#fff;--ink:#2b2b2b;--mute:#6b6459;--green:#2f6b3f;--gold:#c9962b;--line:#e8dcc3;--on:#fff;--chip:#f1e4c6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161a16;--card:#212721;--ink:#f0ebe0;--mute:#a9a597;--green:#3f8a54;--gold:#e0b04a;--line:#343c34;--chip:#2b332b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161a16;--card:#212721;--ink:#f0ebe0;--mute:#a9a597;--green:#3f8a54;--gold:#e0b04a;--line:#343c34;--chip:#2b332b;color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 110px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:84px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--green);z-index:10}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--green);color:var(--on)}
+.hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;max-width:860px;margin:0 auto}
+.brand{font-weight:700;font-size:18px}
+.hero{padding:28px 0 8px}
+.hero h1{margin:0 0 6px;font-size:28px;line-height:1.2;color:var(--green)}
+.ar{font-size:20px;color:var(--gold);margin:0 0 8px}
+.hero p{margin:0;color:var(--mute)}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.badge{background:var(--chip);border-radius:99px;padding:5px 12px;font-size:14px}
+nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 49px);z-index:8;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav button{margin-right:8px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}
+.chip.on{background:var(--green);color:var(--on);border-color:var(--green)}
+h2{color:var(--green);margin:26px 0 10px;font-size:22px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.nm{font-weight:600}.pr{color:var(--mute);font-size:14px}
+.step{display:flex;align-items:center;gap:10px;flex:none}
+.step button{width:34px;height:34px;border-radius:50%;border:1px solid var(--green);background:var(--card);color:var(--green);font-size:20px;line-height:1;cursor:pointer}
+.step button.add{width:auto;border-radius:99px;padding:0 16px;background:var(--green);color:var(--on);font-size:15px}
+.step b{min-width:28px;text-align:center}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:26px 0}
+.row{display:flex;justify-content:space-between;gap:10px;padding:5px 0}
+.tot{border-top:1px solid var(--line);margin-top:8px;padding-top:10px;font-weight:700;font-size:18px}
+label{display:block;font-size:14px;color:var(--mute);margin:12px 0 4px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.grid{grid-template-columns:1fr}}
+.go{width:100%;margin-top:16px;padding:14px;border:0;border-radius:12px;background:var(--green);color:var(--on);font:inherit;font-weight:700;font-size:17px;cursor:pointer}
+.err{color:#c0392b;margin-top:10px;font-size:14px}
+.note{color:var(--mute);font-size:13px;margin-top:10px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--green);color:var(--on);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:600}
+footer{padding:10px 0 30px;color:var(--mute);font-size:14px;text-align:center}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const {useState,useEffect}=React;
+const html=htm.bind(React.createElement);
+/* ===== EDIT THESE ===== */
+const CFG={brand:"Madinah Meals",wa:"966556412369",fee:0,cur:"SAR",partner:"Diwan Al Medinah Restaurant"};
+/* wa = YOUR WhatsApp number with country code, no + or spaces. Prices below are from the restaurant menu: please re-check them. */
+const MENU=[
+{id:"karahi",t:"Karahi & Handi (per kg)",u:"kg",i:[["Mutton Karahi",120],["Mutton White Karahi",120],["Mutton Achari Karahi",120],["Mutton Shanwari",120],["Chicken Karahi",80],["Chicken White Karahi",80],["Chicken Achari Karahi",80],["Chicken Shanwari",80],["Chicken Ginger Masala",80],["Chicken Handi",90],["Chicken White Handi",90],["Chicken Achari Handi",90],["Chicken Tikka Masala",90],["Kabab Masala",90]]},
+{id:"rice",t:"Rice & Biryani",i:[["Chicken Biryani",20],["Mutton Biryani",25],["Chicken Tikka Biryani",22],["Mutton Yakhni Pulao",25],["Kabli Pulao",25],["Vegetable Pulao",10],["Pulao with Shami",15],["Plain Rice",5]]},
+{id:"bbq",t:"Bar B Que",i:[["Chicken Boti",25],["Chicken Malai Boti",30],["Chicken Cheese Tikka",35],["Chicken Reshmi Kabab",30],["Chicken Piece",15],["Chicken Pakora",60],["Beef Kabab",30],["Beef Afghani Kabab",30],["Beef Tikka",30],["Fish Tikka (8 pcs)",40],["Fish Fillet",80,"kg"],["BBQ Platter – 2 persons",60],["BBQ Platter – 4 persons",120],["BBQ Platter – 8 persons",220]]},
+{id:"arabic",t:"Arabic Food",i:[["Bokhari Rice",7],["Chicken Fahaam Rice",50],["Chicken Shawaya Rice",50]]},
+{id:"curry",t:"Curries",i:[["Chicken Qorma",18],["Chicken White Qorma",20],["Mutton Deghi Qorma",20],["Beef Qorma",20],["Chicken Jalfarezi",20],["Chicken Haleem",15],["Green Peas Qeema",17],["Egg Kofta",15],["Seasonal Vegetable",10],["Mix Vegetable",10],["Daal Chana",10],["Daal Maash",10],["Kari Pakora",10],["Eggplant Potato",10]]},
+{id:"bfast",t:"Breakfast",i:[["Nihari",15],["Mutton Paya",12],["Chicken Channa",12],["Egg Channa",10],["Channa",8],["Omelette",5],["Egg Half Fry",5],["Egg Full Fry",5],["Paratha Aloo",3],["Paratha",2]]},
+{id:"sweet",t:"Salad & Sweets",i:[["Fresh Salad",3],["Cream Salad",5],["Mint Raita",2],["Zeera Raita",2],["Kheer / Firni",5],["Sawaiyaan",5],["Custard",5],["Lab e Sheeren",5],["Gajar Halwa",10]]},
+{id:"drinks",t:"Beverages",i:[["Tea",3],["Cold Drink",3],["Water",1]]}
+];
+const unitOf=(c,it)=>it[2]||c.u||"";
+const stepOf=(c,it)=>unitOf(c,it)==="kg"?0.5:1;
+const fq=q=>Number.isInteger(q)?String(q):q.toFixed(1);
+const PLACES={hotel:"Hotel room",masjid:"Near Masjid an-Nabawi",other:"Other address"};
+const PAY={cash:"Cash on delivery",card:"Mada / Apple Pay on delivery"};
+
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+function Stepper({q,step,onChange}){
+  if(!q)return html`<div class="step"><button class="add" onClick=${()=>onChange(step)}>Add</button></div>`;
+  return html`<div class="step"><button aria-label="Remove" onClick=${()=>onChange(Math.max(0,q-step))}>−</button><b>${fq(q)}</b><button aria-label="Add" onClick=${()=>onChange(q+step)}>+</button></div>`;
+}
+
+function App(){
+  const [cart,setCart]=useState(()=>load("mm_cart",{}));
+  const [cat,setCat]=useState("all");
+  const [f,setF]=useState(()=>load("mm_form",{name:"",phone:"",type:"hotel",place:"",room:"",when:"asap",time:"",pay:"cash",notes:""}));
+  const [err,setErr]=useState("");
+  useEffect(()=>save("mm_cart",cart),[cart]);
+  useEffect(()=>save("mm_form",f),[f]);
+  const set=(k,v)=>setF(p=>({...p,[k]:v}));
+  const setQty=(key,q)=>setCart(p=>{const n={...p};if(q<=0)delete n[key];else n[key]=q;return n});
+  const lines=[];
+  MENU.forEach((c,ci)=>c.i.forEach((it,ii)=>{const q=cart[ci+"-"+ii];if(q)lines.push({c,it,q,key:ci+"-"+ii})}));
+  const sub=lines.reduce((s,l)=>s+l.q*l.it[1],0);
+  const total=sub+CFG.fee;
+  const count=lines.length;
+  const goOrder=()=>{const e=document.getElementById("order");if(e)e.scrollIntoView()};
+  const send=()=>{
+    if(!count)return setErr("Please add at least one item.");
+    if(!f.name.trim()||!f.phone.trim())return setErr("Please enter your name and phone number.");
+    if(!f.place.trim())return setErr("Please tell us where to deliver (hotel name or location).");
+    setErr("");
+    const m=["*New order – "+CFG.brand+"*","","Name: "+f.name,"Phone: "+f.phone,
+      "Deliver to: "+PLACES[f.type]+" – "+f.place+(f.room?" (Room/Gate: "+f.room+")":""),
+      "Time: "+(f.when==="asap"?"As soon as possible":"At "+(f.time||"(time not set)")),"",
+      "*Items*",...lines.map(l=>"• "+fq(l.q)+(unitOf(l.c,l.it)==="kg"?" kg":" ×")+" "+l.it[0]+" – "+CFG.cur+" "+(l.q*l.it[1])),"",
+      "Food total: "+CFG.cur+" "+sub,"Delivery fee: "+(CFG.fee?CFG.cur+" "+CFG.fee:"to be confirmed"),
+      "Payment: "+PAY[f.pay]].concat(f.notes?["","Notes: "+f.notes]:[]);
+    window.open("https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(m.join("\n")),"_blank");
+  };
+  const shown=MENU.map((c,ci)=>({c,ci})).filter(x=>cat==="all"||x.c.id===cat);
+  return html`<div>
+    <header><div class="hd"><span class="brand">🍽️ ${CFG.brand}</span><button class="chip" onClick=${goOrder}>Order (${count})</button></div></header>
+    <div class="wrap">
+      <section class="hero">
+        <h1>Hot Pakistani & Arabic meals, delivered to you in Madinah</h1>
+        <p class="ar">وجبات طازجة تصلك إلى فندقك في المدينة المنورة</p>
+        <p>Freshly cooked by ${CFG.partner}. Order here, and we bring it to your hotel room or to a meeting point near Masjid an-Nabawi.</p>
+        <div class="badges"><span class="badge">🏨 Hotel delivery</span><span class="badge">🕌 Near Masjid an-Nabawi</span><span class="badge">💬 Confirmed on WhatsApp</span></div>
+      </section>
+    </div>
+    <nav><div class="wrap">
+      <button class=${"chip"+(cat==="all"?" on":"")} onClick=${()=>setCat("all")}>All</button>
+      ${MENU.map(c=>html`<button key=${c.id} class=${"chip"+(cat===c.id?" on":"")} onClick=${()=>setCat(c.id)}>${c.t.replace(" (per kg)","")}</button>`)}
+    </div></nav>
+    <div class="wrap">
+      ${shown.map(({c,ci})=>html`<section key=${c.id}><h2>${c.t}</h2>
+        ${c.i.map((it,ii)=>{const k=ci+"-"+ii,u=unitOf(c,it);return html`<div class="item" key=${k}>
+          <div><div class="nm">${it[0]}</div><div class="pr">${CFG.cur} ${it[1]}${u==="kg"?" / kg":""}</div></div>
+          <${Stepper} q=${cart[k]||0} step=${stepOf(c,it)} onChange=${q=>setQty(k,q)} /></div>`})}
+      </section>`)}
+
+      <section class="panel" id="order">
+        <h2 style=${{marginTop:0}}>Your order</h2>
+        ${count?html`<div>${lines.map(l=>html`<div class="row" key=${l.key}><span>${fq(l.q)}${unitOf(l.c,l.it)==="kg"?" kg":" ×"} ${l.it[0]}</span><span>${CFG.cur} ${l.q*l.it[1]}</span></div>`)}
+          <div class="row"><span>Delivery</span><span>${CFG.fee?CFG.cur+" "+CFG.fee:"Confirmed on WhatsApp"}</span></div>
+          <div class="row tot"><span>Total</span><span>${CFG.cur} ${total}</span></div></div>`
+          :html`<p class="pr">Your cart is empty. Add items from the menu above.</p>`}
+        <label>Your name</label><input value=${f.name} onInput=${e=>set("name",e.target.value)} autocomplete="name" />
+        <label>Phone / WhatsApp number</label><input type="tel" value=${f.phone} onInput=${e=>set("phone",e.target.value)} placeholder="+92 …" autocomplete="tel" />
+        <label>Where should we deliver?</label>
+        <select value=${f.type} onChange=${e=>set("type",e.target.value)}>${Object.keys(PLACES).map(k=>html`<option key=${k} value=${k}>${PLACES[k]}</option>`)}</select>
+        <div class="grid">
+          <div><label>${f.type==="hotel"?"Hotel name":f.type==="masjid"?"Meeting point (e.g. gate number)":"Address or map link"}</label><input value=${f.place} onInput=${e=>set("place",e.target.value)} /></div>
+          <div><label>${f.type==="hotel"?"Room number":"Landmark (optional)"}</label><input value=${f.room} onInput=${e=>set("room",e.target.value)} /></div>
+        </div>
+        <div class="grid">
+          <div><label>Delivery time</label><select value=${f.when} onChange=${e=>set("when",e.target.value)}><option value="asap">As soon as possible</option><option value="later">Choose a time</option></select></div>
+          ${f.when==="later"?html`<div><label>Time</label><input type="time" value=${f.time} onInput=${e=>set("time",e.target.value)} /></div>`:null}
+        </div>
+        <label>Payment</label>
+        <select value=${f.pay} onChange=${e=>set("pay",e.target.value)}>${Object.keys(PAY).map(k=>html`<option key=${k} value=${k}>${PAY[k]}</option>`)}</select>
+        <label>Notes (spice level, allergies, etc.)</label><textarea rows="2" value=${f.notes} onInput=${e=>set("notes",e.target.value)}></textarea>
+        ${err?html`<div class="err">${err}</div>`:null}
+        <button class="go" onClick=${send}>Send order on WhatsApp</button>
+        <div class="note">Your order opens in WhatsApp. We confirm the price, delivery fee and time with you before we prepare it.</div>
+      </section>
+      <footer>${CFG.brand} · Prepared by ${CFG.partner}, Madinah</footer>
+    </div>
+    ${count?html`<div class="bar" onClick=${goOrder}><span>${count} item${count>1?"s":""} in cart</span><span>${CFG.cur} ${sub} · Checkout →</span></div>`:null}
+  </div>`;
+}
+ReactDOM.createRoot(document.getElementById("root")).render(html`<${App} />`);
+</script>
+</body>
+</html>
